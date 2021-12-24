@@ -15,8 +15,9 @@
 + 创建一个新的卷
     `#gluster volume create <NEW-VOLNAME> [[replica <COUNT> [arbiter <COUNT>]]|[replica 2 thin-arbiter 1]] [disperse [<COUNT>]] [disperse-data <COUNT>] [redundancy <COUNT>] [transport <tcp|rdma|tcp,rdma>] <NEW-BRICK> <TA-BRICK>... [force]`  
     例如，创建一个叫test-volume的卷，由server3:/exp3 和 server4:/exp4 组成:  
-    `#gluster volume create test-volume server3:/exp3 server4:/exp4  
-    Creation of test-volume has been successful  
-    Please start the volume to access data.`  
+    `#gluster volume create test-volume server3:/exp3 server4:/exp4`  
 
 ## 创建分布式卷
+分布式卷中，文件被随机的分布到到卷的brick中。在需要可扩展存储且冗余不重要或已经由其他硬件/软件层提供的场景下，你可以使用分布式卷。
+*注意：基于目录和内容是随机的分布在卷的brick中，磁盘/服务故障会导致严重的数据丢失*  
+![Distributed Volume](./image/distributed-vlume.png)
