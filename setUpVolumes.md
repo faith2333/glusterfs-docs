@@ -14,12 +14,9 @@
 
 + 创建一个新的卷
     `#gluster volume create <NEW-VOLNAME> [[replica <COUNT> [arbiter <COUNT>]]|[replica 2 thin-arbiter 1]] [disperse [<COUNT>]] [disperse-data <COUNT>] [redundancy <COUNT>] [transport <tcp|rdma|tcp,rdma>] <NEW-BRICK> <TA-BRICK>... [force]`  
-    例如，创建一个叫test-volume的卷，由server3:/exp3 和 server4:/exp4 组成:
-
-    `#gluster volume create test-volume server3:/exp3 server4:/exp4
-
-    Creation of test-volume has been successful
-    
+    例如，创建一个叫test-volume的卷，由server3:/exp3 和 server4:/exp4 组成:  
+    `#gluster volume create test-volume server3:/exp3 server4:/exp4  
+    Creation of test-volume has been successful  
     Please start the volume to access data.`  
 
 ## 创建分布式卷
