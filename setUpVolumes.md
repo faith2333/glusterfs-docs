@@ -27,7 +27,7 @@
 分布式卷中，文件被随机的分布到到卷的brick中。在需要可扩展存储且冗余不重要或已经由其他硬件/软件层提供的场景下，你可以使用分布式卷。  
 > *注意：基于目录和内容是随机的分布在卷的brick中，磁盘/服务故障会导致严重的数据丢失*  
 
-![Distributed Volume](./image/distributed-vlume.png)  
+![Distributed Volume](./image/distributed-volume.png)  
 **创建分布式卷**  
 1. 创建受信任存储池（trusted storage pool）
 2. 创建分布式卷
