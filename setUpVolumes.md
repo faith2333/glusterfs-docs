@@ -212,4 +212,23 @@ GlusterFS中纠删码的实现将冗余值限制为小于#Bricks / 2 (或等同�
     如果传输类型没有被指定，tcp将作为默认类型。需要的话，你也可以设置其他选项，比如auth.allow 或 auth.reject。  
     > *注意：*
     > + *确保在尝试挂载卷之前启动卷，否则挂载后的客户端操作将挂起。*
-    
+    > + *对于分布式分散卷如果brick不属于同一个子卷则可以托管在同一个节点上*
+    >   ```
+    >   # gluster volume create <volname> disperse 3 server1:/br1 server2:/br1 server3:/br1 server1:/br2 server2:/br2 server3:/br2
+    >    volume create: : success: please start the volume to access data
+    >   ``` 
+
+## 启动卷
+你在挂载卷之前必须先启动它。
+
+**启动卷**
+ + 开始卷：
+    ```
+    # gluster volume start <VOLNAME> [force]
+    ```  
+
+    比如：启动test-volume  
+    ```
+    # gluster volume start test-volume
+    Starting test-volume has been successful
+    ```
