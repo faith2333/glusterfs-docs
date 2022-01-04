@@ -321,4 +321,33 @@ Brick4: Server2:/home/gfs/r2_3
       Number of entries: 0
       ```  
 
-## 重平衡卷
+## 重平衡卷  
+
+使用add-brick命令扩容卷后，你可能需要重平衡服务中的数据。扩容或者缩容卷后创建的新目录将自动平均分配。对所有已经存在的目录，重新平衡布局和/或数据可以自动修复分布式。  
+
+本节介绍了如何重平衡存储环境中的GlusterFS卷，使用以下常见场景。  
+
++ **修复布局** - 修复布局以使用新的卷拓扑，文件可以分发到新加的节点上。  
++ **修复布局和迁移数据** - 修复布局以使用新的卷拓扑和迁移存在的数据来重平衡卷。   
+
+### 重平衡卷来修复布局改变  
+
+修复布局是必要的，因为布局结构对于给定目录是静态的。即使卷添加了新的brick。在已经存在的目录中新创建的文件将仅存在于原始的brick中。命令`gluster volume rebalance <volname> fix-layout start` 将修复布局信息，所以文件可以被创建在新添加的brick中。此命令发布后，所有缓存的文件的状态信息将重新验证。  
+
+GlusterFS 3.6以后，分配文件给brick将考虑brick的大小。比如，一个20TB大小的brick将会被分配10TB大小brick两倍的文件。在3.6版本以前，两个brick将是同等对待，忽视大小的，将被分配平等的文件份额。    
+
+一个fix-layout重平衡，将仅修复布局变更不迁移数据。如果想迁移存在的数据，使用`gluster volume rebalance <volume> start`命令重平衡服务中的数据。  
+
+**重平衡卷修复布局**  
+
++ 使用以下命令在任意Gluster服务上开始重平衡操作：  
+  `# gluster volume rebalance <VOLNAME> fix-layout start`  
+  
+  比如：
+  ```
+  # gluster volume rebalance test-volume fix-layout start
+   Starting rebalance on volume test-volume has been successful
+  ```  
+
+### 重平衡卷修复布局和迁移数据  
+
