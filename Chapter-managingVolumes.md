@@ -351,3 +351,250 @@ GlusterFS 3.6以后，分配文件给brick将考虑brick的大小。比如，一
 
 ### 重平衡卷修复布局和迁移数据  
 
+分别使用add-brick命令扩展卷后，你需要重平衡服务中的数据。remove-brick命令将自动触发重平衡。  
+
+**重平衡卷修复布局和迁移已经存在的数据**  
+
++ 在任何服务器上使用以下命令开始重平衡操作：  
+  `# gluster volume rebalance <VOLNAME> start`  
+  比如：  
+  ```
+  # gluster volume rebalance test-volume start
+  Starting rebalancing on volume test-volume has been successful
+  ```  
+
++ 在任何服务器上使用以下命令强制迁移操作：  
+  `# gluster volume rebalance <VOLNAME> start force`  
+  比如：
+  ```
+  # gluster volume rebalance test-volume start force
+   Starting rebalancing on volume test-volume has been successful
+  ```  
+
+重平衡操作将尝试跨节点平衡磁盘使用率。因此将跳过那些导致卷更不平衡的文件。这导致链接文件仍然保留在系统中，因此或许导致性能问题。该行为可以被force参数覆盖。  
+
+
+### 展示重平衡操作的状态  
+
+你可以在需要的时候显示重平衡卷操作的状态信息。  
+
++ 使用以下命令检查重平衡操作状态  
+  `# gluster volume rebalance <VOLNAME> status`  
+  比如：
+  ```
+  # gluster volume rebalance test-volume status
+                                Node  Rebalanced-files  size  scanned       status
+                           ---------  ----------------  ----  -------  -----------
+   617c923e-6450-4065-8e33-865e28d9428f               416  1463      312  in progress
+  ```  
+
+  完成重平衡操作的时间依赖于卷中匹配文件大小的文件的数量。继续检查重平衡状态，确认重平衡的文件的数量或者总共扫描的保持增长的文件数量。  
+
+  比如，再次执行状态命令，或许显示结果和下面类似：  
+  ```
+  # gluster volume rebalance test-volume status
+                                Node  Rebalanced-files  size  scanned       status
+                           ---------  ----------------  ----  -------  -----------
+   617c923e-6450-4065-8e33-865e28d9428f               498  1783      378  in progress
+  ```  
+
+  当重平衡完成时，重平衡状态显示如下：
+  ```
+  # gluster volume rebalance test-volume status
+                                Node  Rebalanced-files  size  scanned       status
+                           ---------  ----------------  ----  -------  -----------
+   617c923e-6450-4065-8e33-865e28d9428f               502  1873      334   completed
+  ```  
+
+### 停止正在执行的重平衡操作  
+
+如果需要的话，你可以停止重平衡操作。  
+
++ 使用以下命令停止重平衡操作：  
+  `# gluster volume rebalance <VOLNAME> stop`  
+  比如：  
+  ```
+  # gluster volume rebalance test-volume stop
+                                Node  Rebalanced-files  size  scanned       status
+                           ---------  ----------------  ----  -------  -----------
+   617c923e-6450-4065-8e33-865e28d9428f               59   590      244       stopped
+   Stopped rebalance process on volume test-volume
+  ```  
+
+## 停止卷  
+
+1. 使用以下命令停止卷：  
+   `# gluster volume stop <VOLNAME>`  
+   
+   比如，停止test-volume卷  
+   ```
+   # gluster volume stop test-volume
+   Stopping volume will make its data inaccessible. Do you want to continue? (y/n)
+   ```  
+
+2. 输入`y` 确认操作。命令输出显示如下：  
+   `Stopping volume test-volume has been successful`  
+
+## 删除卷  
+1. 使用如下命令删除卷： 
+   `# gluster volume delete <VOLNAME>`   
+   比如，删除test-volume卷
+   ```
+   # gluster volume delete test-volume
+   Deleting volume will erase all information about the volume. Do you want to continue? (y/n)
+   ```
+
+2. 输入`y`确认操作。命令输出显示如下：  
+   `Deleting volume test-volume has been successful`  
+
+## 复制卷触发自愈（self-heal）  
+
+在复制模块中，以前当brick离线后重新上线时，你必须手动触发自愈，以使所有的副本同步。现在自愈进程主动运行在后台，诊断问题并每十分钟对需要治愈的文件启动自愈。  
+
+你可以查看需要*治愈*的文件列表，当前/以前修复的文件列表，处于脑裂状态的文件列表，你可以手动触发整个卷的自愈或者仅仅需要治愈的文件。  
+
++ 触发仅治愈需要治愈的文件:  
+  `# gluster volume heal <VOLNAME>`  
+  比如，触发test-volume卷自愈需要*治愈*的文件:  
+  ```
+   # gluster volume heal test-volume
+   Heal operation on volume test-volume has been successful
+  ```  
+
++ 触发自愈在卷的所有文件:  
+  `# gluster volume heal <VOLNAME> full`  
+  比如，触发test-volume卷所有文件的自愈：
+  ```
+   # gluster volume heal test-volume full
+   Heal operation on volume test-volume has been successful
+  ```
+
++ 查看需要*治愈*的文件列表:  
+  `# gluster volume heal <VOLNAME> info`  
+  比如，查看test-volume卷需要*治愈*的文件列表：  
+  ```
+   # gluster volume heal test-volume info
+   Brick server1:/gfs/test-volume_0
+   Number of entries: 0
+
+   Brick server2:/gfs/test-volume_1
+   Number of entries: 101
+   /95.txt
+   /32.txt
+   /66.txt
+   /35.txt
+   /18.txt
+   /26.txt
+   /47.txt
+   /55.txt
+   /85.txt
+   ...
+  ```  
+
++ 查看已经自愈完成的文件列表：
+  `# gluster volume heal <VOLNAME> info healed`  
+  比如，查看test-volume卷中自愈完成的卷：  
+  ```
+   # gluster volume heal test-volume info healed
+   Brick Server1:/gfs/test-volume_0
+   Number of entries: 0
+
+   Brick Server2:/gfs/test-volume_1
+   Number of entries: 69
+   /99.txt
+   /93.txt
+   /76.txt
+   /11.txt
+   /27.txt
+   /64.txt
+   /80.txt
+   /19.txt
+   /41.txt
+   /29.txt
+   /37.txt
+   /46.txt
+   ...
+  ```  
+
++ 查看特别的自愈失败的卷文件列表：
+  `# gluster volume heal <VOLNAME> info failed`  
+  比如，查看test-volume卷自愈失败的文件列表：  
+  ```
+   # gluster volume heal test-volume info failed
+   Brick Server1:/gfs/test-volume_0
+   Number of entries: 0
+
+   Brick Server2:/gfs/test-volume_3
+   Number of entries: 72
+   /90.txt
+   /95.txt
+   /77.txt
+   /71.txt
+   /87.txt
+   /24.txt
+   ...
+  ```
+
++ 查看特别的在脑裂状态的卷的文件列表：  
+  `# gluster volume heal <VOLNAME> info split-brain`  
+  比如，查看test-volume卷处于脑裂状态的文件列表：  
+  ```
+   # gluster volume heal test-volume info split-brain
+   Brick Server1:/gfs/test-volume_2
+   Number of entries: 12
+   /83.txt
+   /28.txt
+   /69.txt
+   ...
+
+   Brick Server2:/gfs/test-volume_3
+   Number of entries: 12
+   /83.txt
+   /28.txt
+   /69.txt
+   ...
+
+  ```  
+
+## 非统一文件分配（NUFA）  
+
+NUFA转换器或者非统一文件访问转换器（Non Uniform File Access translator）旨在HPC类型的环境中使用时给予本地驱动器更高的优先级。可以应用为分布式和复制转换器；后一种情况下，如果空间允许，它确保一个副本时本地的。  
+
+当客户端在服务端创建了文件，基于文件名把文件分配给卷的brick。这种分配或许不是理想的，因为对非本地brick或者暴露目录的读/写操作存在高延迟和不必要的网络开销。NUFA确保文件创建在服务本地暴露目录，因此，为服务访问文件降低延迟和节省带宽。对于运行在存储服务的挂载点上的应用同样有效。  
+
+如果本地brick使用完了空间或者达到最小的磁盘空余限制，而不是分配文件给本地brick，如果同个卷的其他brick有充足空间，NUFA分发文件给它们。  
+
+在卷上创建任何数据前应该启用NUFA。  
+
+`# gluster volume set <VOLNAME> cluster.nufa enable`  
+
+**重要**  
+
+下列情形支持NUFA:  
+
++ 卷在每个服务上只有一个brick  
++ 使用FUSE客户端。**NFS和SMB模式不支持NUFA**  
++ 客户端挂载NUFA-enabled卷必须在可信任存储池中（TSP）  
+
+在使用Unify转换器时，NUFA调度器同样存在，如下：  
+```
+volume bricks
+  type cluster/nufa
+  option local-volume-name brick1
+  subvolumes brick1 brick2 brick3 brick4 brick5 brick6 brick7
+end-volume
+```  
+
+#### NUFA附加选项  
++ lookup-unhashed  
+  这是一个高级选项，如果文件在与文件名的哈希值匹配的子卷上丢失，则会在所有子卷中查找文件。默认为开启  
++ local-volume-name  
+  考虑本地和首选文件创建的卷的名称，默认时搜索与系统主机名匹配的卷。  
++ subvolumes
+  这个选项列出'cluster/nufa'卷的子卷，这个转换器要求超过一个自卷。  
+
+## BitRot检测  
+
+
+
+
