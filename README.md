@@ -8,3 +8,4 @@
   + [配置卷](./Chapter-settingUpVolumes.md)
   + [配置客户端](./Chapter-settingUpClients.md)
   + [管理卷](./Chapter-managingVolumes.md)
+  + [日志](./Chapter-logging.md)
