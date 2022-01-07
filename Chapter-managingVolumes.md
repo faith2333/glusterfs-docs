@@ -595,6 +595,42 @@ end-volume
 
 ## BitRot检测  
 
+通过Gluster中的BitRot检测，可以识别"隐匿"类型的磁盘错误，其中数据被悄悄破坏，从磁盘到存储软件层没有任何迹象表明发生了错误。这也有助于捕捉brick的"后端"修补（在数据是直接在brick上操作的，而不是通过FUSE或者NFS或者任何其他的访问协议）。  
+
+ BitRot检测默认是关闭的，需要使用其他的子命令开启。  
+ 1. 为一个卷开启bitrot检测:  
+   `# gluster volume bitrot <VOLNAME> enable`   
+   相似的方法关闭bitrot:   
+   `# gluster volume bitrot <VOLNAME> disable`  
+
+> 注意：启用bitrot会在每个节点上生成 Signer & Scrubber 守护进程。Singer进程负责 signing（为每个文件计算校验和）而Srubber进程根据对象数据验证计算出的校验和。  
+
+1. Scrubber守护进程有三个调节模式可以调整对于对象的确认频率。  
+   ```
+   # volume bitrot <VOLNAME> scrub-throttle lazy
+   # volume bitrot <VOLNAME> scrub-throttle normal
+   # volume bitrot <VOLNAME> scrub-throttle aggressive
+   ```  
+
+2. 默认Scrubber每两周清理一次文件系统。可以通过基于预先定义的频率来调整清理，比如每个月。可以通过如下所示完成：
+   ```
+   # volume bitrot <VOLNAME> scrub-frequency daily
+   # volume bitrot <VOLNAME> scrub-frequency weekly
+   # volume bitrot <VOLNAME> scrub-frequency biweekly
+   # volume bitrot <VOLNAME> scrub-frequency monthly
+   ```  
+
+> 注意：GA版本下每天清理是不可用的  
+
+1. Scrubber守护进程可以暂停和在需要的时候重新运行，可以通过如下命令完成：  
+   `# volume bitrot <VOLNAME> scrub pause`   
+   重新开始清理：  
+   `# volume bitrot <VOLNAME> scrub resume`  
+
+> 注意：Signing（签名）不可以暂停（和重新开始）和只要卷的bitrot是开启的，签名进程就是一直运行的。  
+
+
+
 
 
 
