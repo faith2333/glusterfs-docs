@@ -5,7 +5,9 @@
 
 ## 目录 
 + 管理员指南
-  + [配置卷](./Chapter-settingUpVolumes.md)
-  + [配置客户端](./Chapter-settingUpClients.md)
-  + [管理卷](./Chapter-managingVolumes.md)
-  + [日志](./Chapter-logging.md)
+  + [配置卷](./administration-guide/Chapter-settingUpVolumes.md)
+  + [配置客户端](./administration-guide/Chapter-settingUpClients.md)
+  + [管理卷](./administration-guide/Chapter-managingVolumes.md)
+  + [日志](./administration-guide/Chapter-logging.md)  
++ 故障排查指南
+  + [索引](./troubleshooting-guide/Chapter-index.md)
