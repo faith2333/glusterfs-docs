@@ -13,3 +13,4 @@
   + [索引](./troubleshooting-guide/Chapter-index.md)
   + 组成
     + [CLI和glusterd故障诊断](./troubleshooting-guide/components/troubleshooting-cli-and-glusterd.md)
+    + [异地复制故障诊断](./troubleshooting-guide/components/troubleshooting-geo-replication.md)
