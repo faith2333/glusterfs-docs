@@ -15,3 +15,6 @@
     + [CLI和glusterd故障诊断](./troubleshooting-guide/components/troubleshooting-cli-and-glusterd.md)
     + [异地复制故障诊断](./troubleshooting-guide/components/troubleshooting-geo-replication.md)
     + [gNFS故障诊断](./troubleshooting-guide/components/troubleshooting-gnfs.md)
+    + [自愈故障诊断](./troubleshooting-guide/components/troubleshooting-selfheal.md)
+    + [脑裂故障诊断](./troubleshooting-guide/components/troubleshooting-splitbrains.md)
+    + [文件锁故障诊断](./troubleshooting-guide/components/troubleshooting-filelocks.md)
