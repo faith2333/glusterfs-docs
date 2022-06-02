@@ -27,7 +27,7 @@
 分布式卷中，文件被随机的分布到到卷的brick中。在需要可扩展存储且冗余不重要或已经由其他硬件/软件层提供的场景下，你可以使用分布式卷。  
 > *注意：基于目录和内容是随机的分布在卷的brick中，磁盘/服务故障会导致严重的数据丢失*  
 
-![Distributed Volume](./images/distributed-volume.png)  
+![Distributed Volume](../images/distributed-volume.png)  
 **创建分布式卷**  
 1. 创建受信任存储池（trusted storage pool）
 2. 创建分布式卷
@@ -66,7 +66,7 @@ Please start the volume to access data.
 
 复制卷跨卷的多个brick创建文件副本。你可以在对高可用（high-availability）和高可靠（high-reliability）至关重要的场景下使用复制卷。  
 > *注意：复制卷的brick数量应该和其副本数相等。为了避免磁盘和服务故障，建议brick来自不同的服务节点。*
-![Replicated Volume](./images/replicated-volume.png)  
+![Replicated Volume](../images/replicated-volume.png)  
 **创建复制卷**  
 1. 创建信任存储池
 2. 创建复制卷
@@ -101,7 +101,7 @@ Please start the volume to access data.
 ## 创建分布式复制卷  
 在卷中跨复制brick分发文件。你可以在对可扩展存储（scale storage）和好可靠（high-reliability）是至关重要的场景使用分布式复制卷。在大多数场景下，分布式复制卷也能提供读性能的提升。
 > *注意：分布式复制卷的brick数量应该是副本数量的倍数。此外，指定brick时的顺序会对数据保护产生巨大影响。在你指定的brick列表中，每一个副本数（replica_count）的连续brick会形成一个副本集，所有的副本集组成了一个卷侧（volume-wide）分布式集。为确保副本集（replica-set）成员没有放置在同一个节点上，请列出每个节点上的第一个brick，然后按照相同的顺序列出第二个，以此类推*
-![Distributed Replicated Volume](./images/disrtributed-replicated-volume.png)  
+![Distributed Replicated Volume](../images/disrtributed-replicated-volume.png)  
 
 **创建分布式复制卷**  
 1. 创建信任存储池
